@@ -1,5 +1,5 @@
 # confluent-tools
-confluent-tools is an API for intgeracting with a confluent kafka cluster. It includes classes to automate standard processes including topic creation, schema registration, and connector configuration.
+confluent-tools is an API for interacting with a confluent kafka cluster. It includes classes to automate standard processes including topic creation, schema registration, and connector configuration.
 
 This API is written in java/scala, and has the following advantages over direct shell/CLI scripting
 
