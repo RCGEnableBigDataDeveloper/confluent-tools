@@ -19,9 +19,10 @@ public class TopicClientTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		topicClient = new TopicClient.Builder().withUrl(Context.get("confluent.rest.topic.url"))
-				.withZookeeper(Context.get("confluent.zookeeper.url")).withConfiguration(new Properties())
-				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
+		topicClient = new TopicClient.Builder().withScheme(Context.get("confluent.schemaregistry.scheme"))
+				.withUrl(Context.get("confluent.rest.topic.url")).withZookeeper(Context.get("confluent.zookeeper.url"))
+				.withConfiguration(new Properties()).withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
+
 		topicName = "unit-test-topic-000";
 		super.setUp();
 	}
