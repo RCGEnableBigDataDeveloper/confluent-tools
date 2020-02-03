@@ -20,7 +20,7 @@ TopicClient topicClient = new TopicClient.Builder()
 	.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
 	.build();
 	
-topicClient.createTopic(topicName, 3, 1);        
+topicClient.createTopic(topicName, 3, 3);        
 ```
 
 **Register a schema and assign it to a topic**
