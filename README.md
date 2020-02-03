@@ -14,6 +14,7 @@ This API is written in java/scala, and has the following advantages over direct 
 **Create a topic with 3 partitions and a replication factor of 3**
 ```java
 TopicClient topicClient = new TopicClient.Builder()
+	.withScheme(Context.get("confluent.schemaregistry.scheme"))
 	.withUrl(Context.get("confluent.rest.topic.url"))
 	.withZookeeper(Context.get("confluent.zookeeper.url"))
 	.withConfiguration(new Properties())
