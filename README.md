@@ -13,35 +13,38 @@ This API is written in java/scala, and has the following advantages over direct 
 
 **Create a topic with 3 partitions and a replication factor of 3**
 ```java
-		TopicClient	topicClient = new TopicClient.Builder()
-				.withUrl(Context.get("confluent.rest.topic.url"))
-				.withZookeeper(Context.get("confluent.zookeeper.url"))
-				.withConfiguration(new Properties())
-				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
-				.build();
-    topicClient.createTopic(topicName, 3, 1);        
+TopicClient topicClient = new TopicClient.Builder()
+	.withUrl(Context.get("confluent.rest.topic.url"))
+	.withZookeeper(Context.get("confluent.zookeeper.url"))
+	.withConfiguration(new Properties())
+	.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
+	.build();
+	
+topicClient.createTopic(topicName, 3, 1);        
 ```
 
 **Register a schema and assign it to a topic**
 ```java
-	SchemaRegistryClient schemaRegistryClient = new SchemaRegistryClient.Builder()
-				.withScheme(Context.get("confluent.schemaregistry.scheme"))
-				.withUrl(Context.get("confluent.schemaregistry.url"))
-				.withConfiguration(new Properties())
-				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
-				.build();
-      String schemaRequest = IOUtils.toString(SchemaRegistryClient.class.getResourceAsStream("/schema-definition.json"),        StandardCharsets.UTF_8);
-			String response = schemaRegistryClient.add(topicName, schemaRequest);
+SchemaRegistryClient schemaRegistryClient = new SchemaRegistryClient.Builder()
+	.withScheme(Context.get("confluent.schemaregistry.scheme"))
+	.withUrl(Context.get("confluent.schemaregistry.url"))
+	.withConfiguration(new Properties())
+	.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
+	.build();
+	
+String schemaRequest = IOUtils.toString(SchemaRegistryClient.class.getResourceAsStream("/schema-definition.json"),        StandardCharsets.UTF_8);
+String response = schemaRegistryClient.add(topicName, schemaRequest);
 ```
 
 **Create a kafka connector**
 ```java
-		ConnectClient connectClient = new ConnectClient.Builder()
-				.withScheme(Context.get("confluent.connect.scheme"))
-				.withUrl(Context.get("confluent.connect.url"))
-				.withConfiguration(new Properties())
-				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
-				.build();  
-    connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);  
-    connectClient.createConnector(connectorRequest);
+ConnectClient connectClient = new ConnectClient.Builder()
+	.withScheme(Context.get("confluent.connect.scheme"))
+	.withUrl(Context.get("confluent.connect.url"))
+	.withConfiguration(new Properties())
+	.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
+	.build();  
+				
+connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);  
+connectClient.createConnector(connectorRequest);
 ```
