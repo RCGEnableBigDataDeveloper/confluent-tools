@@ -1,0 +1,1 @@
+{"value_schema": "{\"type\": \"record\", \"name\": \"Event\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"value": {"name": "testUser"}}]}
