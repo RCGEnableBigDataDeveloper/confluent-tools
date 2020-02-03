@@ -1,5 +1,5 @@
 # confluent-tools
-confluent-tools is an API for intgeracting with a confluent kafka cluster. It includes classes to automate standard processes including topic creation, schema registration, and connector configuration.
+confluent-tools is an API for interacting with a confluent kafka cluster. It includes classes to automate standard processes including topic creation, schema registration, and connector configuration.
 
 This API is written in java/scala, and has the following advantages over direct shell/CLI scripting
 
@@ -14,6 +14,7 @@ This API is written in java/scala, and has the following advantages over direct 
 **Create a topic with 3 partitions and a replication factor of 3**
 ```java
 TopicClient topicClient = new TopicClient.Builder()
+	.withScheme(Context.get("confluent.schemaregistry.scheme"))
 	.withUrl(Context.get("confluent.rest.topic.url"))
 	.withZookeeper(Context.get("confluent.zookeeper.url"))
 	.withConfiguration(new Properties())
@@ -45,6 +46,6 @@ ConnectClient connectClient = new ConnectClient.Builder()
 	.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
 	.build();  
 				
-connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);  
-connectClient.createConnector(connectorRequest);
+String connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);  
+String response = connectClient.createConnector(connectorRequest);
 ```
