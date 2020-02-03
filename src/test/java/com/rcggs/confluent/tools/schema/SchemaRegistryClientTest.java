@@ -26,24 +26,24 @@ public class SchemaRegistryClientTest extends TestCase {
 				.withScheme(Context.get("confluent.schemaregistry.scheme"))
 				.withUrl(Context.get("confluent.schemaregistry.url")).withConfiguration(new Properties())
 				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
-		topicName = "unit-test-topic";
+		topicName = "unit-test-topic-1";
 		super.setUp();
 	}
 
 	@Test
 	public void testSchemaGet() {
-		String response = schemaRegistryClient.get("newtopic3");
-		logger.debug(response);
+		String response = schemaRegistryClient.get(topicName);
+		logger.info(response);
 		assertNotNull(response);
 	}
 
 	@Test
 	public void testSchemaCreate() {
 		try {
-			String schema = IOUtils.toString(SchemaRegistryClient.class.getResourceAsStream("/produce.json"),
+			String schema = IOUtils.toString(SchemaRegistryClient.class.getResourceAsStream("/schema.json"),
 					StandardCharsets.UTF_8);
 			String response = schemaRegistryClient.add(topicName, schema);
-			logger.debug(response);
+			logger.info(response);
 			assertNotNull(response);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -53,7 +53,7 @@ public class SchemaRegistryClientTest extends TestCase {
 	@Test
 	public void testSchemaList() {
 		String response = schemaRegistryClient.list();
-		logger.debug(response);
+		logger.info(response);
 		assertNotNull(response);
 	}
 

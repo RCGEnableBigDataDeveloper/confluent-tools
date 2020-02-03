@@ -23,7 +23,7 @@ public class TopicClientTest extends TestCase {
 				.withUrl(Context.get("confluent.rest.topic.url")).withZookeeper(Context.get("confluent.zookeeper.url"))
 				.withConfiguration(new Properties()).withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
 
-		topicName = "unit-test-topic";
+		topicName = "unit-test-topic-1";
 		super.setUp();
 	}
 
