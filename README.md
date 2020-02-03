@@ -45,6 +45,6 @@ ConnectClient connectClient = new ConnectClient.Builder()
 	.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON)
 	.build();  
 				
-connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);  
-connectClient.createConnector(connectorRequest);
+String connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);  
+String response = connectClient.createConnector(connectorRequest);
 ```
