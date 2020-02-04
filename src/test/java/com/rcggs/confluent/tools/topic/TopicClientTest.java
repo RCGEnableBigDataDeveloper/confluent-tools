@@ -36,14 +36,14 @@ public class TopicClientTest extends TestCase {
 	public void testTopicsList() {
 		String topics = topicClient.list();
 		assertNotNull(topics);
-		logger.debug(topics);
+		logger.info(topics);
 	}
 
 	@Test
 	public void testTopicGet() {
 		String topics = topicClient.get(topicName);
 		assertNotNull(topics);
-		logger.debug(topics);
+		logger.info(topics);
 	}
 
 	@Test

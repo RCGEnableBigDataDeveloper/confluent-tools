@@ -19,29 +19,31 @@ import org.apache.commons.io.IOUtils;
 
 public class AvroUtil {
 
-	static void serialize(final GenericRecord record, final File in, final String file) throws IOException {
+	public static void serialize(final GenericRecord record, final File in, final String file) throws IOException {
 		serialize(record, in, new FileOutputStream(new File(file)));
 	}
 
-	static void serialize(final GenericRecord record, final File in, final Path path) throws IOException {
+	public static void serialize(final GenericRecord record, final File in, final Path path) throws IOException {
 		serialize(record, in, new FileOutputStream(path.toFile()));
 	}
 
-	static void serialize(final GenericRecord record, final File in, final File file) throws IOException {
+	public static void serialize(final GenericRecord record, final File in, final File file) throws IOException {
 		serialize(record, in, new FileOutputStream(file));
 	}
 
-	static void serialize(final GenericRecord record, final File in, final OutputStream out) throws IOException {
+	public static void serialize(final GenericRecord record, final File in, final OutputStream out) throws IOException {
 		Schema schema = new Schema.Parser().parse(in);
 		serialize(record, schema, out);
 	}
 
-	static void serialize(final GenericRecord record, final InputStream in, final OutputStream out) throws IOException {
+	public static void serialize(final GenericRecord record, final InputStream in, final OutputStream out)
+			throws IOException {
 		Schema schema = new Schema.Parser().parse(in);
 		serialize(record, schema, out);
 	}
 
-	static void serialize(final GenericRecord record, final Schema schema, final OutputStream out) throws IOException {
+	public static void serialize(final GenericRecord record, final Schema schema, final OutputStream out)
+			throws IOException {
 		DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<GenericRecord>(schema);
 		DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<GenericRecord>(datumWriter);
 		dataFileWriter.create(schema, out);
@@ -49,15 +51,15 @@ public class AvroUtil {
 		dataFileWriter.close();
 	}
 
-	static void deserilaize(final File in, final String file) throws IOException {
+	public static void deserilaize(final File in, final String file) throws IOException {
 		deserilaize(in, new File(file));
 	}
 
-	static void deserilaize(final File in, final Path path) throws IOException {
+	public static void deserilaize(final File in, final Path path) throws IOException {
 		deserilaize(in, path.toFile());
 	}
 
-	static void deserilaize(final InputStream in, final File file) throws IOException {
+	public static void deserilaize(final InputStream in, final File file) throws IOException {
 		final File tempFile = File.createTempFile("user", "avsc");
 		tempFile.deleteOnExit();
 		try (FileOutputStream out = new FileOutputStream(tempFile)) {
@@ -66,7 +68,7 @@ public class AvroUtil {
 		}
 	}
 
-	static void deserilaize(final File in, final File file) throws IOException {
+	public static void deserilaize(final File in, final File file) throws IOException {
 		DataFileReader<GenericRecord> dataFileReader = null;
 		try {
 			Schema schema = new Schema.Parser().parse(in);

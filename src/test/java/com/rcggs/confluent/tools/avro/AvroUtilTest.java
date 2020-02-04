@@ -1,4 +1,4 @@
-package com.rcggs.confluent.tools.util;
+package com.rcggs.confluent.tools.avro;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,6 +10,7 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.log4j.Logger;
 
 import com.rcggs.confluent.tools.core.Context;
+import com.rcggs.confluent.tools.util.AvroUtil;
 
 import junit.framework.TestCase;
 

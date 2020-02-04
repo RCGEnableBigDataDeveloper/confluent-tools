@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
 import org.apache.http.ParseException;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -31,21 +32,45 @@ public class HttpUtil {
 	}
 
 	public static String get(final String resource, final String contentType, final String user,
-			final String password) {		
+			final String password) {
 		CloseableHttpClient client = HttpClients.createMinimal();
-		String responseString = null;	
+		String responseString = null;
 		try {
 			HttpGet httpGet = new HttpGet(resource);
-			if (contentType != null)
-				httpGet.setHeader(ContentTypes.KEY, contentType);
+			setHeaders(httpGet, contentType, null, user, password);
 
-			if (user != null)
-				setCredentials(httpGet, user, password);
-			
 			CloseableHttpResponse response = client.execute(httpGet);
 			responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
-		} catch (AuthenticationException | ParseException | IOException e) {
+		} catch (ParseException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return responseString;
+	}
+
+	public static String put(final String resource, final String contentType) {
+		return put(resource, contentType, null, null);
+	}
+
+	public static String put(final String resource, final String contentType, final String user,
+			final String password) {
+		CloseableHttpClient client = HttpClients.createMinimal();
+		String responseString = null;
+		try {
+			HttpPut httpPut = new HttpPut(resource);
+			setHeaders(httpPut, contentType, null, user, password);
+
+			CloseableHttpResponse response = client.execute(httpPut);
+			responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+
+		} catch (ParseException | IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
@@ -77,14 +102,7 @@ public class HttpUtil {
 		HttpPost httpPost = new HttpPost(resource);
 		try {
 			httpPost.setEntity(new StringEntity(body));
-			if (contentType != null)
-				httpPost.addHeader(ContentTypes.KEY, contentType);
-
-			if (accepts != null)
-				httpPost.addHeader(Accepts.KEY, accepts);
-
-			if (user != null)
-				setCredentials(httpPost, user, password);
+			setHeaders(httpPost, contentType, accepts, user, password);
 
 			CloseableHttpResponse response = client.execute(httpPost);
 			HttpEntity entity = response.getEntity();
@@ -104,10 +122,28 @@ public class HttpUtil {
 		return null;
 	}
 
-	private static void setCredentials(final HttpRequest httpPost, final String user, final String password)
+	private static void setHeaders(final HttpRequestBase entity, final String contentType, final String accepts,
+			final String user, final String password) {
+		
+		if (contentType != null)
+			entity.addHeader(ContentTypes.KEY, contentType);
+
+		if (accepts != null)
+			entity.addHeader(Accepts.KEY, accepts);
+
+		if (user != null) {
+			try {
+				setCredentials(entity, user, password);
+			} catch (AuthenticationException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void setCredentials(final HttpRequestBase entity, final String user, final String password)
 			throws AuthenticationException {
 
 		UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
-		httpPost.addHeader(new BasicScheme().authenticate(creds, httpPost, null));
+		entity.addHeader(new BasicScheme().authenticate(creds, entity, null));
 	}
 }
