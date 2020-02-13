@@ -11,14 +11,20 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.junit.Test;
 
+import com.rcggs.confluent.tools.BaseTest;
+import com.rcggs.confluent.tools.TopicDef;
 import com.rcggs.confluent.tools.core.Context;
 
-import junit.framework.TestCase;
+public class AvroConsumerTest extends BaseTest {
 
-public class AvroConsumerTest extends TestCase {
-
+	
+	private TopicDef topicDef;
+	
 	@Test
 	public void testProduceAvro() {
+
+		topicDef = getTopicDef();
+
 		Properties props = new Properties();
 
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Context.get("confluent.broker.url"));
@@ -33,9 +39,8 @@ public class AvroConsumerTest extends TestCase {
 
 		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-		String topic = "test";
 		final Consumer<String, String> consumer = new KafkaConsumer<String, String>(props);
-		consumer.subscribe(Arrays.asList(topic));
+		consumer.subscribe(Arrays.asList(topicDef.getName()));
 
 		try {
 			while (true) {

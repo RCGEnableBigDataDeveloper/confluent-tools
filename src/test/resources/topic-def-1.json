@@ -1,0 +1,15 @@
+[
+	{
+		"topic": {
+			"name": "t12",
+			"partitions": 3,
+			"replicas": 1
+		},
+		"schema": {
+			"compatability-mode": "FORWARD_TRANSITIVE",
+			"schema": {
+				"schema": "{\"name\": \"value_my_topic_1\",  \"type\": \"record\", \"namespace\": \"\",  \"fields\": [{ \"name\" : \"Name\" , \"type\" : \"string\" },{ \"name\" : \"Age\" , \"type\" : \"int\" }]}"
+			}
+		}
+	}
+]

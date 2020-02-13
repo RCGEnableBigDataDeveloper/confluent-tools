@@ -90,6 +90,11 @@ public class SchemaRegistryClient {
 		return HttpUtil.post(resource, schema, ContentTypes.SCHEMA_REGISTRY_JSON, Accepts.KAFKA_JSON);
 	}
 
+	public String delete(final String subjectName) {
+		String resource = String.format("%s://%s/subjects/%s", scheme, url, subjectName);
+		return HttpUtil.delete(resource, ContentTypes.SCHEMA_REGISTRY_JSON, null, null);
+	}
+
 	public String get(final String topicName) {
 		String resource = String.format("%s://%s/subjects/%s-value/versions/1", scheme, url, topicName);
 		return HttpUtil.get(resource);
@@ -98,5 +103,10 @@ public class SchemaRegistryClient {
 	public String list() {
 		String resource = String.format("%s://%s/subjects/", scheme, url);
 		return HttpUtil.get(resource);
+	}
+
+	public String setCompatibility(final String topicName, final String compatibilityMode) {
+		return HttpUtil.put(String.format("%s://%s/config/%s", scheme, url, topicName),
+				"application/vnd.schemaregistry.v1+json", "{\"compatibility\": \"" + compatibilityMode + "\"}");
 	}
 }

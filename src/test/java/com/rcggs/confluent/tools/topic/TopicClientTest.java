@@ -5,31 +5,32 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.rcggs.confluent.tools.BaseTest;
+import com.rcggs.confluent.tools.TopicDef;
 import com.rcggs.confluent.tools.core.ContentTypes;
 import com.rcggs.confluent.tools.core.Context;
 
-import junit.framework.TestCase;
-
-public class TopicClientTest extends TestCase {
+public class TopicClientTest extends BaseTest {
 
 	private static final Logger logger = Logger.getLogger(Context.class);
 
 	private TopicClient topicClient;
-	private String topicName;
+
+	private TopicDef topicDef;
 
 	@Override
 	protected void setUp() throws Exception {
+		topicDef = getTopicDef();
 		topicClient = new TopicClient.Builder().withScheme(Context.get("confluent.schemaregistry.scheme"))
 				.withUrl(Context.get("confluent.rest.topic.url")).withZookeeper(Context.get("confluent.zookeeper.url"))
 				.withConfiguration(new Properties()).withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
 
-		topicName = "unit-test-topic-1";
 		super.setUp();
 	}
 
 	@Test
 	public void testTopicCreate() {
-		topicClient.createTopic(topicName, 3, 1);
+		topicClient.createTopic(topicDef.getName(), topicDef.getPartitions(), topicDef.getReplicas());
 	}
 
 	@Test
@@ -41,14 +42,14 @@ public class TopicClientTest extends TestCase {
 
 	@Test
 	public void testTopicGet() {
-		String topics = topicClient.get(topicName);
+		String topics = topicClient.get(topicDef.getName());
 		assertNotNull(topics);
 		logger.info(topics);
 	}
 
 	@Test
-	public void testTopicDelte() {
-		topicClient.delete(topicName);
+	public void testTopicDelete() {
+		topicClient.delete(topicDef.getName());
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import org.apache.http.ParseException;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -36,9 +37,9 @@ public class HttpUtil {
 		CloseableHttpClient client = HttpClients.createMinimal();
 		String responseString = null;
 		try {
+
 			HttpGet httpGet = new HttpGet(resource);
 			setHeaders(httpGet, contentType, null, user, password);
-
 			CloseableHttpResponse response = client.execute(httpGet);
 			responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
@@ -54,19 +55,46 @@ public class HttpUtil {
 
 		return responseString;
 	}
-
-	public static String put(final String resource, final String contentType) {
-		return put(resource, contentType, null, null);
-	}
-
-	public static String put(final String resource, final String contentType, final String user,
+	
+	public static String delete(final String resource, final String contentType, final String user,
 			final String password) {
 		CloseableHttpClient client = HttpClients.createMinimal();
 		String responseString = null;
 		try {
-			HttpPut httpPut = new HttpPut(resource);
-			setHeaders(httpPut, contentType, null, user, password);
 
+			HttpDelete httpDelete = new HttpDelete(resource);
+			setHeaders(httpDelete, contentType, null, user, password);
+			CloseableHttpResponse response = client.execute(httpDelete);
+			responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+
+		} catch (ParseException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return responseString;
+	}
+
+	public static String put(final String resource, final String contentType, final String requestBody) {
+		return put(resource, contentType, requestBody, null, null);
+	}
+
+	public static String put(final String resource, final String contentType, final String requestBody,
+			final String user, final String password) {
+		CloseableHttpClient client = HttpClients.createMinimal();
+		String responseString = null;
+		try {
+
+			HttpPut httpPut = new HttpPut(resource);
+			StringEntity entity = new StringEntity(requestBody, "UTF-8");
+			entity.setContentType(contentType);
+			httpPut.setEntity(entity);
+			setHeaders(httpPut, null, null, user, password);
 			CloseableHttpResponse response = client.execute(httpPut);
 			responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
@@ -101,9 +129,9 @@ public class HttpUtil {
 		CloseableHttpClient client = HttpClients.createMinimal();
 		HttpPost httpPost = new HttpPost(resource);
 		try {
+
 			httpPost.setEntity(new StringEntity(body));
 			setHeaders(httpPost, contentType, accepts, user, password);
-
 			CloseableHttpResponse response = client.execute(httpPost);
 			HttpEntity entity = response.getEntity();
 
@@ -124,7 +152,7 @@ public class HttpUtil {
 
 	private static void setHeaders(final HttpRequestBase entity, final String contentType, final String accepts,
 			final String user, final String password) {
-		
+
 		if (contentType != null)
 			entity.addHeader(ContentTypes.KEY, contentType);
 

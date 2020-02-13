@@ -1,4 +1,4 @@
-package com.rcggs.confluent.tools.schema;
+package com.rcggs.confluent.tools.avro;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -9,73 +9,63 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.rcggs.confluent.tools.BaseTest;
-import com.rcggs.confluent.tools.TopicDef;
 import com.rcggs.confluent.tools.core.CompatibilityMode;
 import com.rcggs.confluent.tools.core.ContentTypes;
 import com.rcggs.confluent.tools.core.Context;
+import com.rcggs.confluent.tools.schema.SchemaRegistryClient;
+import com.rcggs.confluent.tools.topic.TopicClient;
 
-public class SchemaRegistryClientTest extends BaseTest {
+public class CompatabilityTest extends BaseTest {
 
 	private static final Logger logger = Logger.getLogger(Context.class);
 
+	private TopicClient topicClient;
 	private SchemaRegistryClient schemaRegistryClient;
-	
-	private TopicDef topicDef;
+
+	private String topicName = "test_topic_007";
 
 	@Override
 	protected void setUp() throws Exception {
-		topicDef= getTopicDef();
+
 		schemaRegistryClient = new SchemaRegistryClient.Builder()
 				.withScheme(Context.get("confluent.schemaregistry.scheme"))
 				.withUrl(Context.get("confluent.schemaregistry.url")).withConfiguration(new Properties())
 				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
+
+		topicClient = new TopicClient.Builder().withScheme(Context.get("confluent.schemaregistry.scheme"))
+				.withUrl(Context.get("confluent.rest.topic.url")).withZookeeper(Context.get("confluent.zookeeper.url"))
+				.withConfiguration(new Properties()).withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
+
 		super.setUp();
-	}
-
-	@Test
-	public void testSchemaGet() {
-		String response = schemaRegistryClient.get(topicDef.getName());
-		logger.info(response);
-		assertNotNull(response);
-	}
-
-	@Test
-	public void testSchemaCreate() {
-		try {
-			String schema = IOUtils.toString(SchemaRegistryClient.class.getResourceAsStream("/schema.json"),
-					StandardCharsets.UTF_8);
-			String response = schemaRegistryClient.add(topicDef.getName(), schema);
-			logger.info(response);
-			assertNotNull(response);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void testSchemaList() {
-		String response = schemaRegistryClient.list();
-		logger.info(response);
-		assertNotNull(response);
-	}
-
-	@Test
-	public void testSchemaDelete() {
-		String response = schemaRegistryClient.delete(topicDef.getName() + "-value");
-		logger.info(response);
-		assertNotNull(response);
-	}
-
-	@Test
-	public void testSchemaCompatibility() {
-		String response = schemaRegistryClient.setCompatibility(topicDef.getName(), CompatibilityMode.BACKWARD);
-		logger.info(response);
-		assertNotNull(response);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
+	}
+
+	@Test
+	public void testCompatability() {
+		try {
+
+			/** create the topic **/
+			topicClient.createTopic(topicName, 3, 1);
+
+			/** register the schema **/
+			String schema = IOUtils.toString(SchemaRegistryClient.class.getResourceAsStream("/schema.json"),
+					StandardCharsets.UTF_8);
+
+			/** set the compatability mode **/
+			String response = schemaRegistryClient.setCompatibility(topicName, CompatibilityMode.BACKWARD);
+			logger.info(response);
+			assertNotNull(response);
+
+			response = schemaRegistryClient.add(topicName, schema);
+			assertNotNull(response);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

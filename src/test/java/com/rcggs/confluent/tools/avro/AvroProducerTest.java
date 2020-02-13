@@ -11,14 +11,18 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.SerializationException;
 import org.junit.Test;
 
+import com.rcggs.confluent.tools.BaseTest;
+import com.rcggs.confluent.tools.TopicDef;
 import com.rcggs.confluent.tools.core.Context;
 
-import junit.framework.TestCase;
+public class AvroProducerTest extends BaseTest {
 
-public class AvroProducerTest extends TestCase {
+	private TopicDef topicDef;
 
 	@Test
 	public void testProduceAvro() {
+
+		topicDef = getTopicDef();
 
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Context.get("confluent.broker.url"));
@@ -30,17 +34,20 @@ public class AvroProducerTest extends TestCase {
 				Context.get("confluent.schemaregistry.url")));
 
 		KafkaProducer<Object, Object> producer = new KafkaProducer<>(props);
-
 		String key = "key1";
-		String userSchema = "{\"type\":\"record\"," + "\"name\":\"myrecord\","
-				+ "\"fields\":[{ \"name\" : \"Name\" , \"type\" : \"string\" },{ \"name\" : \"Age\" , \"type\" : \"int\" }]}";
+		String userSchema = "{\"type\":\"record\"," + "\"name\":\"record1\","
+				+ "\"fields\":[{ \"name\" : \"Name\" , \"type\" : \"string\" },{ \"name\" : \"Age\" , \"type\" : \"int\" },{ \"name\" : \"height\" , \"type\" : \"int\", \"default\":10 }]}";
 		Schema.Parser parser = new Schema.Parser();
 		Schema schema = parser.parse(userSchema);
 		GenericRecord avroRecord = new GenericData.Record(schema);
 		avroRecord.put("Name", "value1");
 		avroRecord.put("Age", 44);
+		avroRecord.put("height", 44);
 
-		ProducerRecord<Object, Object> record = new ProducerRecord<>("test", key, avroRecord);
+		ProducerRecord<Object, Object> record = new ProducerRecord<>(topicDef.getName(), key, avroRecord);
+
+		System.err.println(avroRecord);
+
 		try {
 			producer.send(record);
 		} catch (SerializationException e) {
