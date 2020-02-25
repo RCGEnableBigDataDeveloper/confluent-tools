@@ -79,10 +79,6 @@ public class TopicClient {
 		this.zookeeper = zookeeper;
 	}
 
-	public String getScheme() {
-		return url;
-	}
-
 	public void setConfiguration(Properties configuration) {
 		this.configuration = configuration;
 	}
