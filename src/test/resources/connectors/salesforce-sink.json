@@ -1,0 +1,19 @@
+{
+    "name": "SalesforceSObjectSinkConnector1",
+    "config": {
+        "name" : "SalesforceSObjectSinkConnector1",
+            "connector.class" : "io.confluent.salesforce.SalesforceSObjectSinkConnector",
+            "tasks.max" : "1",
+            "topics" : "transactions",
+            "salesforce.consumer.key" : "XXXX",
+            "salesforce.consumer.secret" : "XXXX",
+            "salesforce.object" : "XXXX",
+            "salesforce.password" : "password",
+            "salesforce.password.token" : "12345>",
+            "salesforce.username" : "ericperler@hotmail.com",
+            "confluent.topic.bootstrap.servers": "localhost:9092",
+            "confluent.topic.replication.factor": "1",
+            "salesforce.sink.object.operation": "delete",
+             "override.event.type": "true"
+     }
+}

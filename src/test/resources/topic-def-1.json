@@ -1,14 +1,14 @@
 [
 	{
 		"topic": {
-			"name": "t12",
+			"name": "topic_100",
 			"partitions": 3,
 			"replicas": 1
 		},
 		"schema": {
 			"compatability-mode": "FORWARD_TRANSITIVE",
 			"schema": {
-				"schema": "{\"name\": \"value_my_topic_1\",  \"type\": \"record\", \"namespace\": \"\",  \"fields\": [{ \"name\" : \"Name\" , \"type\" : \"string\" },{ \"name\" : \"Age\" , \"type\" : \"int\" }]}"
+				"schema": "{\"name\": \"record1\",  \"type\": \"record\", \"namespace\": \"\",  \"fields\": [{ \"name\" : \"id\" , \"type\" : \"int\" },{ \"name\" : \"confidence\" , \"type\" : \"int\" },{ \"name\" : \"encode_format\" , \"type\" : \"int\" },{ \"name\" : \"epc\" , \"type\" : \"int\" },{ \"name\" : \"epcState\" , \"type\" : \"string\" },{ \"name\" : \"event\" , \"type\" : \"string\" },{ \"name\" : \"facility_id\" , \"type\" : \"string\" },{ \"name\" : \"filter_value\" , \"type\" : \"string\" },{ \"name\" : \"gtin\" , \"type\" : \"int\" },{ \"name\" : \"last_read\" , \"type\" : \"int\" },{ \"name\" : \"asnId\" , \"type\" : \"string\" },{ \"name\" : \"timestmp\" , \"type\" : \"string\" },{ \"name\" : \"lat\" , \"type\" : \"string\" },{ \"name\" : \"lng\" , \"type\" : \"string\" }]}"
 			}
 		}
 	}

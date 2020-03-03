@@ -24,7 +24,7 @@ public class ConnectClientTest extends TestCase {
 		connectClient = new ConnectClient.Builder().withScheme(Context.get("confluent.connect.scheme"))
 				.withUrl(Context.get("confluent.connect.url")).withConfiguration(new Properties())
 				.withContentType(ContentTypes.SCHEMA_REGISTRY_JSON).build();
-		connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connector.json"), StandardCharsets.UTF_8);
+		connectorRequest = IOUtils.toString(getClass().getResourceAsStream("/connectors/bigquery-sink.json"), StandardCharsets.UTF_8);
 		super.setUp();
 	}
 
