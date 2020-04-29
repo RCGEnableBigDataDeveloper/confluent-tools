@@ -12,7 +12,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.log4j.Logger;
 
-import io.confluent.shaded.com.google.common.base.Throwables;
+import com.google.common.base.Throwables;
 
 public class SimpleKafkaProducerTest {
 

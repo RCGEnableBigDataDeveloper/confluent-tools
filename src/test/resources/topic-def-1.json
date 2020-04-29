@@ -1,7 +1,7 @@
 [
 	{
 		"topic": {
-			"name": "topic_100",
+			"name": "test-topic-2",
 			"partitions": 3,
 			"replicas": 1
 		},
