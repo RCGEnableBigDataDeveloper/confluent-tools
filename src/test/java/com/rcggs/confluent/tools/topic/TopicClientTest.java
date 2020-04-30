@@ -50,9 +50,11 @@ public class TopicClientTest extends BaseTest {
 	@Test
 	public void testTopicDelete() {
 		//topicClient.delete(topicDef.getName());
-		topicClient.delete("test-topic-10");
-		topicClient.delete("test_2_14");
+//		topicClient.delete("test-topic-10");
+		topicClient.delete("test-topic-2");
 		topicClient.delete("input_topic_1");
+		topicClient.delete("test_2_14");
+
 
 	}
 

@@ -1,13 +1,16 @@
 [
-	{
-		"security": {
-			"krb-home": "/etc/krb5",
-			"principal": "svc_acct@PRIME.COM",
-			"credential": "/etc/security/keytabs/scv_acct.keytab"
-		},
-		"permissions": 
-{
-		"permission" : {}
-			
-	}
+  {
+    "security": {
+      "krb-home": "/etc/krb5",
+      "principal": "svc_acct@PRIME.COM",
+      "credential": "/etc/security/keytabs/scv_acct.keytab"
+    },
+    "permissions": [
+      {
+        "permission": {
+          "adminuser": "r,w"
+        }
+      }
+    ]
+  }
 ]
