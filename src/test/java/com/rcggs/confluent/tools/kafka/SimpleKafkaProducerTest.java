@@ -13,6 +13,7 @@ import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Throwables;
+import com.rcggs.confluent.tools.util.HttpUtil;
 
 public class SimpleKafkaProducerTest {
 
@@ -30,14 +31,18 @@ public class SimpleKafkaProducerTest {
 
 		try {
 
-			final String json = IOUtils.toString(SimpleKafkaProducerTest.class.getResourceAsStream("/schema.json"),
-					StandardCharsets.UTF_8);
+			// final String json =
+			// IOUtils.toString(SimpleKafkaProducerTest.class.getResourceAsStream("/schema.json"),
+			// StandardCharsets.UTF_8);
 
-			IntStream.range(0, 10).forEach(e -> {
+			final String json = "phone_chnage,1561397835381,chicago,illinois,cook,60602,41.8781,-87.6298";
+
+			IntStream.range(0, 100).forEach(e -> {
 				try {
 
-					Thread.sleep(100);
-					ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>("test1",
+					System.out.println(json);
+					Thread.sleep(1000);
+					ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>("events",
 							"test".getBytes(), json.getBytes());
 					producer.send(record).get();
 
@@ -48,7 +53,7 @@ public class SimpleKafkaProducerTest {
 
 			});
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 
 			logger.error(Throwables.getStackTraceAsString(e));
 			e.printStackTrace();
